@@ -1,0 +1,436 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Library Management API",
+    "version": "1.0.0",
+    "description": "API untuk mengelola peminjaman dan pengembalian buku oleh anggota perpustakaan."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/members/borrow": {
+      "post": {
+        "summary": "Borrow a book",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "memberCode": {
+                    "type": "string",
+                    "example": "M001"
+                  },
+                  "bookCode": {
+                    "type": "string",
+                    "example": "JK-45"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book borrowed successfully"
+          },
+          "400": {
+            "description": "Error message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members/return": {
+      "post": {
+        "summary": "Return a book",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "memberCode": {
+                    "type": "string",
+                    "example": "M001"
+                  },
+                  "bookCode": {
+                    "type": "string",
+                    "example": "JK-45"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book returned successfully"
+          },
+          "400": {
+            "description": "Error message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members": {
+      "get": {
+        "summary": "Get all members",
+        "responses": {
+          "200": {
+            "description": "A list of members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "M001"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Angga"
+                      },
+                      "borrowedBooks": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "borrowedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-01T00:00:00Z"
+                            },
+                            "returnedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": true,
+                              "example": "2023-07-08T00:00:00Z"
+                            },
+                            "bookId": {
+                              "type": "integer",
+                              "example": 1
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members/{id}": {
+      "get": {
+        "summary": "Get member by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the member"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Member details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "M001"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Angga"
+                    },
+                    "borrowedBooks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "borrowedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-01T00:00:00Z"
+                          },
+                          "returnedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true,
+                            "example": "2023-07-08T00:00:00Z"
+                          },
+                          "bookId": {
+                            "type": "integer",
+                            "example": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Member not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books": {
+      "get": {
+        "summary": "Get all books",
+        "responses": {
+          "200": {
+            "description": "A list of books",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "JK-45"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Harry Potter"
+                      },
+                      "author": {
+                        "type": "string",
+                        "example": "J.K Rowling"
+                      },
+                      "stock": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "get": {
+        "summary": "Get book by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the book"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "JK-45"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Harry Potter"
+                    },
+                    "author": {
+                      "type": "string",
+                      "example": "J.K Rowling"
+                    },
+                    "stock": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/": {
+      "post": {
+        "summary": "Add New Book",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "example": "M001"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Buku Memasak"
+                  },
+                  "author": {
+                    "type": "string",
+                    "example": "Gilga Sahid"
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "M001"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Buku Memasak"
+                    },
+                    "author": {
+                      "type": "string",
+                      "example": "Gilga Sahid"
+                    },
+                    "stock": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
